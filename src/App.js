@@ -9,81 +9,93 @@ function App() {
     //State is immutable.
     //This is global state and can be accessed from any component.
 
-    const [showAddTask, setShowAddTask] =useState(false)
+    const [showAddTask, setShowAddTask] =useState(true)
 
-    const [tasks, setTasks] = useState([  ]) 
+    const [tasks, setTasks] = useState([  {
+      id: 1,
+      text: "Doctors Appointment",
+      day: "Feb 5th at 2:30pm",
+      reminder: true
+    },
+    {
+      id: 2,
+      text: "Meeting at School",
+      day: "Feb 6th at 1:30pm",
+      reminder: true
+    }
+   ]) 
 
 
-    useEffect(()=>{
-      const getTasks =async () => {
-        const tasksFromServer = await fetchTasks ()
-        setTasks(tasksFromServer)
-      }
+    // useEffect(()=>{
+    //   const getTasks =async () => {
+    //     const tasksFromServer = await fetchTasks ()
+    //     setTasks(tasksFromServer)
+    //   }
 
-      getTasks()
+    //  getTasks()
 
-    }, [])//user dependncy array
+    //}, [])//user dependncy array
 
 //Fetch Tasks from db.json
-    const fetchTasks = async()=>{
-      const res = await fetch('http://localhost:5000/tasks')
-      const data = await res.json()
+    // const fetchTasks = async()=>{
+    //   const res = await fetch('http://localhost:5000/tasks')
+    //   const data = await res.json()
       
-      return data
-    }
-    //Fetch Tasks from db.json
-    const fetchTask = async(id )=>{
-      const res = await fetch(`http://localhost:5000/tasks/${id}`)
-      const data = await res.json()
+    //   return data
+    // }
+    // //Fetch Tasks from db.json
+    // const fetchTask = async(id )=>{
+    //   const res = await fetch(`http://localhost:5000/tasks/${id}`)
+    //   const data = await res.json()
       
-      return data
-    }
+    //   return data
+    // }
 //Add Task
 
-  const addTask = async (task)=>{
-    const res = await fetch('http://localhost:5000/tasks',{
-      method: 'POST',
-      headers:{
-        'Content-type':'application/json'
-      },
-      body: JSON.stringify(task)
-    })
-    const data =await res.json()
-    setTasks([...tasks, data])
-    /*const id =Math.floor(Math.random()* 10000 )+1
+  const addTask =  (task)=>{
+    // const res = await fetch('http://localhost:5000/tasks',{
+    //   method: 'POST',
+    //   headers:{
+    //     'Content-type':'application/json'
+    //   },
+    //   body: JSON.stringify(task)
+    // })
+    // const data =await res.json()
+    // setTasks([...tasks, data])
+    const id =Math.floor(Math.random()* 10000 )+1
     const newTask = {id, ...task }
-    setTasks([...tasks, newTask])*/
+    setTasks([...tasks, newTask])
    
   }
 
 //Delete Task using a funcotion
-    const deleteTask = async (itemid )=>{
-      await fetch(`http://localhost:5000/tasks/${itemid}`,{
-        method:'DELETE',
-      }) //dELETE FROM BACKEND
+    const deleteTask =  (itemid )=>{
+      // await fetch(`http://localhost:5000/tasks/${itemid}`,{
+      //   method:'DELETE',
+      // }) //dELETE FROM BACKEND
       setTasks(tasks.filter((task) => task.id !== itemid))
     }
 //Toggle Reminder
 
-    const toggleReminder = async(id) =>{
-      const taskToToggle = await fetchTask(id)
-      const updTask ={ ...taskToToggle, 
-      reminder: !taskToToggle.reminder}
+    const toggleReminder = (id) =>{
+      // const taskToToggle = await fetchTask(id)
+      // const updTask ={ ...taskToToggle, 
+      // reminder: !taskToToggle.reminder}
 
-      const res =await fetch (`http://localhost:5000/tasks/${id}`,{
-        method: 'PUT',
-        headers:{
-          'Content-type':'application/json'
-        },
-        body: JSON.stringify(updTask)
-      }) 
+      // const res =await fetch (`http://localhost:5000/tasks/${id}`,{
+      //   method: 'PUT',
+      //   headers:{
+      //     'Content-type':'application/json'
+      //   },
+      //   body: JSON.stringify(updTask)
+      // }) 
 
-      const data =await res.json()
+      // const data =await res.json()
 
 
       setTasks(
         tasks.map((task) => task.id === id ? {
-        ...task , reminder: data.reminder
+        ...task , reminder: !task.reminder
       } : task))
 
     }
